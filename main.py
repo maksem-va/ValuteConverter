@@ -1,16 +1,34 @@
-# This is a sample Python script.
+from xml.etree import ElementTree
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import requests
 
 
-# Press the green button in the gutter to run the script.
+def cb_page_getter():
+    url = 'http://www.cbr.ru/scripts/XML_daily.asp'
+    inp = input('Input request. "-faq" for additional information. ').split()
+    page = requests.get(url)
+    tree = ElementTree.fromstring(page.content)
+    xmlDict = {}
+    codeDict = {}
+    for dt in tree.findall('Valute'):
+        code = dt.find('CharCode').text
+        vle = dt.find('Value').text
+        nom = dt.find('Nominal').text
+        name = dt.find('Name').text
+        xmlDict[code.lower()] = vle + " " + nom + " " + name
+    if inp[0] == '-codes':
+        for cde in tree.findall('Valute'):
+            code = cde.find('CharCode').text
+            name = cde.find('Name').text
+            codeDict[code] = name
+        return print(codeDict)
+    if inp[0] == '-faq':
+        return print('Thank you for using my application. Hope, that you will never use this app again. Use command'
+              ' -codes for list of available valutes. Input format: Incoming valute Value. Example: USD 10')
+    string = xmlDict[inp[0].lower()].split()
+    wage = string[0].replace(',', '.')
+    print(inp[1] + " " + inp[0].upper() + " equals " + str(float(inp[1]) * float(wage)) + " RUB")
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    cb_page_getter()
