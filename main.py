@@ -4,8 +4,13 @@ import requests
 
 
 def cb_page_getter():
-    url = 'http://www.cbr.ru/scripts/XML_daily.asp'
     inp = input('Input request. Format: Target Valute Number ').split()
+    result = round(conv_money(inp[0], inp[1]), 3)
+    print((inp[1] + " " + inp[0].upper() + " equals " + str(result) + " RUB"))
+
+
+def conv_money(valute, value):
+    url = 'http://www.cbr.ru/scripts/XML_daily.asp'
     page = requests.get(url)
     tree = ElementTree.fromstring(page.content)
     xmlDict = {}
@@ -16,15 +21,15 @@ def cb_page_getter():
         nom = dt.find('Nominal').text
         name = dt.find('Name').text
         xmlDict[code.lower()] = vle + " " + nom + " " + name
-    if inp[0] == '-codes':
+    if valute == '-codes':
         for cd in tree.findall('Valute'):
             code = cd.find('CharCode').text
             name = cd.find('Name').text
             codeDict[code] = name
         return print(codeDict)
-    string = xmlDict[inp[0].lower()].split()
+    string = xmlDict[valute.lower()].split()
     wage = string[0].replace(',', '.')
-    print(inp[1] + " " + inp[0].upper() + " equals " + str(float(inp[1]) * float(wage)) + " RUB")
+    return float(value) * float(wage)
 
 
 if __name__ == '__main__':
