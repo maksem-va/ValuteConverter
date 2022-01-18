@@ -12,4 +12,5 @@
 # Лабораторная работа №2
 
 
-[![test](https://github.com/maksem-va/ValuteConverter/actions/workflows/test.yml/badge.svg)](https://github.com/maksem-va/ValuteConverter/actions/workflows/test.yml)
+Master - [![test](https://github.com/maksem-va/ValuteConverter/actions/workflows/test.yml/badge.svg)](https://github.com/maksem-va/ValuteConverter/actions/workflows/test.yml)
+Develop - [![test](https://github.com/maksem-va/ValuteConverter/actions/workflows/test.yml/badge.svg?branch=develop)](https://github.com/maksem-va/ValuteConverter/actions/workflows/test.yml)
